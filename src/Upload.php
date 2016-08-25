@@ -20,14 +20,16 @@ class Upload {
 
     public static function uploadImage( $image, $path, $crop = false ) 
     {
+        $base_path = base_path() . '/public/uploads/' . $path;
+
         $filename = unique_name_image() . '.' . $image->getClientOriginalExtension();
 
         if ( ! in_array( strtolower( $image->getClientOriginalExtension() ), static::$supported_image ) ) {
             return '';
         }
 
-        if ( ! is_dir( $path ) ) {
-            mkdir( $path, 0777, true );
+        if ( ! is_dir( $base_path ) ) {
+            mkdir( $base_path, 0777, true );
         }
 
         $im = Image::make($image->getRealPath());
@@ -43,7 +45,7 @@ class Upload {
             }
             $im = $im->resize(200, 200);
         }
-        $im->save( $path . '/' . $filename );
+        $im->save( $base_path . '/' . $filename );
 
         return '/uploads/' . $path . '/' . $filename ;
     }
