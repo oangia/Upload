@@ -1,0 +1,21 @@
+{
+    "name": "oangia/upload",
+    "description": "Upload files for laravel",
+    "type": "php",
+    "license": "oangia",
+    "authors": [
+        {
+            "name": "oangia",
+            "email": "hqnhatdn@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "oangia\\Upload\\": "src/"
+        }
+    }
+}
