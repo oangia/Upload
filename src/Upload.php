@@ -22,9 +22,26 @@ class Upload {
     {
         $base_path = base_path() . '/public/uploads/' . $path;
 
-        $filename = unique_name_image() . '.' . $image->getClientOriginalExtension();
+        if ( is_string( $image ) ) {
+            try {
+                $imgdata = base64_decode( $image );
 
-        if ( ! in_array( strtolower( $image->getClientOriginalExtension() ), static::$supported_image ) ) {
+                $f = finfo_open(FILEINFO_MIME_TYPE);
+                $mime_type = finfo_buffer($f, $imgdata);
+
+                $extension = explode('/', $mime_type)[1];
+                $filename = unique_name_image() . '.' . $extension;
+
+            } catch ( Exception $ex ) {
+                return '';
+            }
+        } else {
+            $filename = unique_name_image() . '.' . $image->getClientOriginalExtension();
+            $extension = $image->getClientOriginalExtension();
+            $image = $image->getRealPath();
+        }
+
+        if ( ! in_array( strtolower( $extension ), static::$supported_image ) ) {
             return '';
         }
 
@@ -32,7 +49,7 @@ class Upload {
             mkdir( $base_path, 0777, true );
         }
 
-        $im = Image::make($image->getRealPath());
+        $im = Image::make( $image );
 
         if ( $crop ) {
             $height = $im->height();
@@ -49,6 +66,7 @@ class Upload {
 
         return '/uploads/' . $path . '/' . $filename ;
     }
+
 
     public static function upload( $file, $path, $filename , $supported ) {
         if ( ! in_array( strtolower( $file->getClientOriginalExtension() ), $supported ) ) {
