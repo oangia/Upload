@@ -38,19 +38,19 @@ class Upload {
             $height = $im->height();
             $width = $im->width();
 
-            if ( $width > $height ) {
-                $im = $im->crop( $height, $height );
+            if ( floor( $width * $crop[ 1 ] / $crop[ 0 ] ) > $height ) {
+                $im = $im->crop( $height * $crop[ 0 ] / $crop[ 1 ], $height );
             } else {
-                $im = $im->crop( $width, $width );
+                $im = $im->crop( $width, $width * $crop[ 1 ] / $crop[ 0 ] );
             }
-            $im = $im->resize(200, 200);
+            $im = $im->resize( 360, 240 ) ;
         }
         $im->save( $base_path . '/' . $filename );
 
         return '/uploads/' . $path . '/' . $filename ;
     }
 
-	public static function upload( $file, $path, $filename , $supported ) {
+    public static function upload( $file, $path, $filename , $supported ) {
         if ( ! in_array( strtolower( $file->getClientOriginalExtension() ), $supported ) ) {
             return '';
         }
@@ -64,5 +64,5 @@ class Upload {
         );
 
         return '/uploads/' . $path . '/' . $filename ;
-	}
+    }
 }
