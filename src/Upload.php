@@ -21,13 +21,13 @@ class Upload {
     public static function uploadImage( $image, $path, $crop = false ) 
     {
         $base_path = base_path() . '/public/uploads/' . $path;
-
+        //dd(base64_encode(base64_decode($image)) === $image);
         if ( is_string( $image ) ) {
             try {
-                $imgdata = base64_decode( $image );
+                $imagedata = base64_decode( $image );
 
                 $f = finfo_open(FILEINFO_MIME_TYPE);
-                $mime_type = finfo_buffer($f, $imgdata);
+                $mime_type = finfo_buffer($f, $imagedata);
 
                 $extension = explode('/', $mime_type)[1];
                 $filename = unique_name_image() . '.' . $extension;
@@ -56,9 +56,9 @@ class Upload {
             $width = $im->width();
 
             if ( floor( $width * $crop[ 1 ] / $crop[ 0 ] ) > $height ) {
-                $im = $im->crop( $height * $crop[ 0 ] / $crop[ 1 ], $height );
+                $im = $im->crop( floor( $height * $crop[ 0 ] / $crop[ 1 ] ), $height );
             } else {
-                $im = $im->crop( $width, $width * $crop[ 1 ] / $crop[ 0 ] );
+                $im = $im->crop( $width, floor( $width * $crop[ 1 ] / $crop[ 0 ] ) );
             }
             $im = $im->resize( 360, 240 ) ;
         }
