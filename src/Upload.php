@@ -24,6 +24,10 @@ class Upload {
         //dd(base64_encode(base64_decode($image)) === $image);
         if ( is_string( $image ) ) {
             try {
+                if ( strpos( $image, 'http' ) !== false ) {
+                    $image = base64_encode( file_get_contents( $image ) );
+                }
+
                 $imagedata = base64_decode( $image );
 
                 $f = finfo_open(FILEINFO_MIME_TYPE);
