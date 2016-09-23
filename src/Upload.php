@@ -3,6 +3,8 @@
 namespace oangia\Upload;
 
 use Intervention\Image\ImageManagerStatic as Image;
+use oangia\CUrl\Curl;
+
 
 class Upload {
 
@@ -25,7 +27,8 @@ class Upload {
         if ( is_string( $image ) ) {
             try {
                 if ( strpos( $image, 'http' ) !== false ) {
-                    $image = base64_encode( file_get_contents( $image ) );
+                    $curl = new CUrl();
+                    $image = base64_encode( $curl->connect( 'GET', $image ) );
                 }
 
                 $imagedata = base64_decode( $image );
@@ -64,7 +67,6 @@ class Upload {
             } else {
                 $im = $im->crop( $width, floor( $width * $crop[ 1 ] / $crop[ 0 ] ) );
             }
-            $im = $im->resize( 360, 240 ) ;
         }
         $im->save( $base_path . '/' . $filename );
 
