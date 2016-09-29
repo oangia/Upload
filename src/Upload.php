@@ -3,7 +3,7 @@
 namespace oangia\Upload;
 
 use Intervention\Image\ImageManagerStatic as Image;
-use oangia\CUrl\Curl;
+use oangia\CUrl\CUrl;
 
 
 class Upload {
