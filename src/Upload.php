@@ -5,7 +5,6 @@ namespace oangia\Upload;
 use Intervention\Image\ImageManagerStatic as Image;
 use oangia\CUrl\CUrl;
 
-
 class Upload {
 
     protected static $supported_image = [
@@ -15,15 +14,11 @@ class Upload {
         'png'
     ];
 
-    public static function uploadAvatar( $image, $path ) 
-    {
-        return static::uploadImage( $image, $path, true );
-    }
-
     public static function uploadImage( $image, $path, $crop = false ) 
     {
-        $base_path = base_path() . '/public/uploads/' . $path;
-        //dd(base64_encode(base64_decode($image)) === $image);
+        $path_date = date('m-Y');
+        $base_path = base_path() . '/public/uploads/' . $path . '/$path_date';
+
         if ( is_string( $image ) ) {
             try {
                 if ( strpos( $image, 'http' ) !== false ) {
@@ -37,13 +32,12 @@ class Upload {
                 $mime_type = finfo_buffer($f, $imagedata);
 
                 $extension = explode('/', $mime_type)[1];
-                $filename = unique_name_image() . '.' . $extension;
-
+                $filename = $this->unique_name_image() . '.' . $extension;
             } catch ( Exception $ex ) {
                 return '';
             }
         } else {
-            $filename = unique_name_image() . '.' . $image->getClientOriginalExtension();
+            $filename = $this->unique_name_image() . '.' . $image->getClientOriginalExtension();
             $extension = $image->getClientOriginalExtension();
             $image = $image->getRealPath();
         }
@@ -88,5 +82,17 @@ class Upload {
         );
 
         return '/uploads/' . $path . '/' . $filename ;
+    }
+
+    private function unique_name_image()
+    {
+        $s = strtoupper(md5(uniqid(rand(), true)));
+        $guidText =
+            substr($s, 0, 8) . '-' .
+            substr($s, 8, 4) . '-' .
+            substr($s, 12, 4). '-' .
+            substr($s, 16, 4). '-' .
+            substr($s, 20);
+        return $guidText;
     }
 }
