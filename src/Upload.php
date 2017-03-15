@@ -16,8 +16,8 @@ class Upload {
 
     public static function uploadImage( $image, $path, $crop = false ) 
     {
-        $path_date = date('m-Y');
-        $base_path = base_path() . '/public/uploads/' . $path . '/$path_date';
+        $path_date = date('Y-m');
+        $base_path = base_path() . '/public/uploads/' . $path . '/' . $path_date;
 
         if ( is_string( $image ) ) {
             try {
@@ -64,7 +64,7 @@ class Upload {
         }
         $im->save( $base_path . '/' . $filename );
 
-        return '/uploads/' . $path . '/' . $filename ;
+        return '/uploads/' . $path . '/' . $path_date . '/' . $filename ;
     }
 
 
