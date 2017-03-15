@@ -32,12 +32,12 @@ class Upload {
                 $mime_type = finfo_buffer($f, $imagedata);
 
                 $extension = explode('/', $mime_type)[1];
-                $filename = $this->unique_name_image() . '.' . $extension;
+                $filename = static::unique_name_image() . '.' . $extension;
             } catch ( Exception $ex ) {
                 return '';
             }
         } else {
-            $filename = $this->unique_name_image() . '.' . $image->getClientOriginalExtension();
+            $filename = static::unique_name_image() . '.' . $image->getClientOriginalExtension();
             $extension = $image->getClientOriginalExtension();
             $image = $image->getRealPath();
         }
@@ -84,7 +84,7 @@ class Upload {
         return '/uploads/' . $path . '/' . $filename ;
     }
 
-    private function unique_name_image()
+    private static function unique_name_image()
     {
         $s = strtoupper(md5(uniqid(rand(), true)));
         $guidText =
