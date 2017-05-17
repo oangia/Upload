@@ -11,7 +11,8 @@ class Upload {
         'gif',
         'jpg',
         'jpeg',
-        'png'
+        'png',
+        'bmp'
     ];
 
     public static function uploadImage( $image, $path, $crop = false ) 
