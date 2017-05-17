@@ -67,18 +67,17 @@ class Upload {
         return '/uploads/' . $path . '/' . $path_date . '/' . $filename ;
     }
 
+    public static function upload($file, $path) {
+        $path_date = date('Y-m');
+        $base_path = base_path() . '/public/uploads/' . $path . '/' . $path_date;
+        $filename = static::unique_name_image() . '.' . $file->getClientOriginalExtension();
 
-    public static function upload( $file, $path, $filename , $supported ) {
-        if ( ! in_array( strtolower( $file->getClientOriginalExtension() ), $supported ) ) {
-            return '';
-        }
-
-        if ( ! is_dir( 'uploads/' . $path ) ) {
-            mkdir( 'uploads/' . $path, 0777, true );
+        if ( ! is_dir( $base_path ) ) {
+            mkdir( $base_path, 0777, true );
         }
 
         $file->move(
-            base_path() . '/public/uploads/' . $path, $filename
+            $base_path, $filename
         );
 
         return '/uploads/' . $path . '/' . $filename ;
